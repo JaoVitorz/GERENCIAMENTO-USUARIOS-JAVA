@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Usuários - Pet Joyful</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <style>
+        body {
+            background: #f5f5f5;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h1><i class="bi bi-heart-pulse-fill"></i> Pet Joyful</h1>
+                    <p class="mb-0">Gerenciamento de Usuários</p>
+                </div>
+                <div>
+                    <a th:href="@{/usuarios/cadastro}" class="btn btn-light me-2">
+                        <i class="bi bi-person-plus"></i> Novo Usuário
+                    </a>
+                    <a th:href="@{/usuarios/login}" class="btn btn-outline-light">
+                        <i class="bi bi-box-arrow-right"></i> Sair
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div th:if="${mensagem}" class="alert alert-success alert-dismissible fade show" role="alert">
+            <span th:text="${mensagem}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+
+        <div th:if="${erro}" class="alert alert-danger alert-dismissible fade show" role="alert">
+            <span th:text="${erro}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+
+        <div class="card shadow-sm">
+            <div class="card-header bg-white">
+                <h5 class="mb-0"><i class="bi bi-people"></i> Lista de Usuários</h5>
+            </div>
+            <div class="card-body">
+                <div th:if="${usuarios == null or usuarios.isEmpty()}" class="text-center py-5">
+                    <i class="bi bi-inbox" style="font-size: 3rem; color: #ccc;"></i>
+                    <p class="text-muted mt-3">Nenhum usuário cadastrado ainda.</p>
+                    <a th:href="@{/usuarios/cadastro}" class="btn btn-primary">
+                        <i class="bi bi-person-plus"></i> Cadastrar Primeiro Usuário
+                    </a>
+                </div>
+
+                <div th:if="${usuarios != null and !usuarios.isEmpty()}">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Nome</th>
+                                    <th>Email</th>
+                                    <th>Telefone</th>
+                                    <th>Endereço</th>
+                                    <th>Data Cadastro</th>
+                                    <th>Status</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="usuario : ${usuarios}">
+                                    <td th:text="${usuario.nome}"></td>
+                                    <td th:text="${usuario.email}"></td>
+                                    <td th:text="${usuario.telefone != null ? usuario.telefone : '-'}"></td>
+                                    <td th:text="${usuario.endereco != null ? usuario.endereco : '-'}"></td>
+                                    <td th:text="${#temporals.format(usuario.dataCadastro, 'dd/MM/yyyy HH:mm')}"></td>
+                                    <td>
+                                        <span th:if="${usuario.ativo}" class="badge bg-success">Ativo</span>
+                                        <span th:unless="${usuario.ativo}" class="badge bg-secondary">Inativo</span>
+                                    </td>
+                                    <td>
+                                        <a th:href="@{/usuarios/editar/{id}(id=${usuario.id})}" 
+                                           class="btn btn-sm btn-primary me-1" 
+                                           title="Editar">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+                                        <a th:href="@{/usuarios/deletar/{id}(id=${usuario.id})}" 
+                                           class="btn btn-sm btn-danger" 
+                                           title="Deletar"
+                                           onclick="return confirm('Tem certeza que deseja deletar este usuário?')">
+                                            <i class="bi bi-trash"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+
