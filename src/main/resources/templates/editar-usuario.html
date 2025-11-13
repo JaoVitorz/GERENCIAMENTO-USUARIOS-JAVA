@@ -92,6 +92,43 @@
                            th:field="*{endereco}">
                 </div>
 
+                <div class="mb-3">
+                    <label for="tipo" class="form-label">Tipo de Usuário</label>
+                    <select class="form-select" id="tipo" th:field="*{tipo}">
+                        <option value="">Selecione o tipo</option>
+                        <option value="adotante">Adotante</option>
+                        <option value="ong">ONG</option>
+                        <option value="veterinario">Veterinário</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="cpf" class="form-label">CPF (para Adotante ou Veterinário)</label>
+                    <input type="text" 
+                           class="form-control" 
+                           id="cpf" 
+                           th:field="*{cpf}"
+                           placeholder="000.000.000-00">
+                </div>
+
+                <div class="mb-3">
+                    <label for="cnpj" class="form-label">CNPJ (para ONG)</label>
+                    <input type="text" 
+                           class="form-control" 
+                           id="cnpj" 
+                           th:field="*{cnpj}"
+                           placeholder="00.000.000/0000-00">
+                </div>
+
+                <div class="mb-3">
+                    <label for="crmv" class="form-label">CRMV (para Veterinário)</label>
+                    <input type="text" 
+                           class="form-control" 
+                           id="crmv" 
+                           th:field="*{crmv}"
+                           placeholder="CRMV">
+                </div>
+
                 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                     <a th:href="@{/usuarios/listar}" class="btn btn-secondary">Cancelar</a>
                     <button type="submit" class="btn btn-primary">

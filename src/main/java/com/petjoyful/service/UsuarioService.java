@@ -20,6 +20,14 @@ public class UsuarioService {
         if (usuarioRepository.existsByEmail(usuario.getEmail())) {
             throw new RuntimeException("Email já cadastrado!");
         }
+        // Garante que a data de cadastro seja definida
+        if (usuario.getDataCadastro() == null) {
+            usuario.setDataCadastro(new java.util.Date());
+        }
+        // Garante que o status ativo seja definido
+        if (usuario.getAtivo() == null) {
+            usuario.setAtivo(true);
+        }
         return usuarioRepository.save(usuario);
     }
 
@@ -65,6 +73,10 @@ public class UsuarioService {
         usuario.setEmail(usuarioAtualizado.getEmail());
         usuario.setTelefone(usuarioAtualizado.getTelefone());
         usuario.setEndereco(usuarioAtualizado.getEndereco());
+        usuario.setTipo(usuarioAtualizado.getTipo());
+        usuario.setCpf(usuarioAtualizado.getCpf());
+        usuario.setCnpj(usuarioAtualizado.getCnpj());
+        usuario.setCrmv(usuarioAtualizado.getCrmv());
         
         if (usuarioAtualizado.getSenha() != null && !usuarioAtualizado.getSenha().isEmpty()) {
             usuario.setSenha(usuarioAtualizado.getSenha());

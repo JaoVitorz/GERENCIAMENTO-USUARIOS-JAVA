@@ -5,10 +5,24 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
-@Document(collection = "usuarios")
+/**
+ * Modelo de Usuário integrado com a coleção "users" do MongoDB Atlas.
+ * Este modelo está sincronizado com o backend Node.js e frontend Next.js.
+ * 
+ * Suporta 3 tipos de usuário:
+ * - Adotante: requer CPF
+ * - ONG: requer CNPJ
+ * - Veterinário: requer CPF e CRMV
+ * 
+ * IMPORTANTE: Se os campos no MongoDB estiverem em português (nome, email, senha),
+ * altere as anotações @Field para usar os nomes em português.
+ * Exemplo: @Field("nome") em vez de @Field("name")
+ */
+@Document(collection = "users")
 public class Usuario {
 
     @Id
@@ -16,24 +30,50 @@ public class Usuario {
 
     @NotBlank(message = "Nome é obrigatório")
     @Size(min = 3, max = 100, message = "Nome deve ter entre 3 e 100 caracteres")
+    @Field("name") // Se no MongoDB estiver como "nome", altere para @Field("nome")
     private String nome;
 
     @NotBlank(message = "Email é obrigatório")
     @Email(message = "Email deve ser válido")
+    @Field("email")
     private String email;
 
     @NotBlank(message = "Senha é obrigatória")
     @Size(min = 6, message = "Senha deve ter no mínimo 6 caracteres")
+    @Field("password")
     private String senha;
 
+    @Field("phone")
     private String telefone;
+    
+    @Field("address")
     private String endereco;
-    private LocalDateTime dataCadastro;
-    private boolean ativo;
+    
+    // Tipo de usuário: "adotante", "ong", "veterinario"
+    @Field("tipo")
+    private String tipo;
+    
+    // CPF - usado por adotante e veterinário
+    @Field("cpf")
+    private String cpf;
+    
+    // CNPJ - usado por ONG
+    @Field("cnpj")
+    private String cnpj;
+    
+    // CRMV - usado por veterinário
+    @Field("crmv")
+    private String crmv;
+    
+    @Field("createdAt")
+    private Date dataCadastro;
+    
+    @Field("active")
+    private Boolean ativo;
 
     // Construtores
     public Usuario() {
-        this.dataCadastro = LocalDateTime.now();
+        this.dataCadastro = new Date();
         this.ativo = true;
     }
 
@@ -93,20 +133,56 @@ public class Usuario {
         this.endereco = endereco;
     }
 
-    public LocalDateTime getDataCadastro() {
+    public Date getDataCadastro() {
         return dataCadastro;
     }
 
-    public void setDataCadastro(LocalDateTime dataCadastro) {
+    public void setDataCadastro(Date dataCadastro) {
         this.dataCadastro = dataCadastro;
     }
 
-    public boolean isAtivo() {
-        return ativo;
+    public Boolean isAtivo() {
+        return ativo != null ? ativo : true;
     }
 
-    public void setAtivo(boolean ativo) {
+    public Boolean getAtivo() {
+        return ativo != null ? ativo : true;
+    }
+
+    public void setAtivo(Boolean ativo) {
         this.ativo = ativo;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+
+    public String getCpf() {
+        return cpf;
+    }
+
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
+    }
+
+    public String getCnpj() {
+        return cnpj;
+    }
+
+    public void setCnpj(String cnpj) {
+        this.cnpj = cnpj;
+    }
+
+    public String getCrmv() {
+        return crmv;
+    }
+
+    public void setCrmv(String crmv) {
+        this.crmv = crmv;
     }
 }
 

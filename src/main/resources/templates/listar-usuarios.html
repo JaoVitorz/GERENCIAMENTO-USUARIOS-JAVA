@@ -68,9 +68,10 @@
                             <thead>
                                 <tr>
                                     <th>Nome</th>
+                                    <th>Tipo</th>
                                     <th>Email</th>
+                                    <th>Documento</th>
                                     <th>Telefone</th>
-                                    <th>Endereço</th>
                                     <th>Data Cadastro</th>
                                     <th>Status</th>
                                     <th>Ações</th>
@@ -79,10 +80,44 @@
                             <tbody>
                                 <tr th:each="usuario : ${usuarios}">
                                     <td th:text="${usuario.nome}"></td>
+                                    <td>
+                                        <span th:if="${usuario.tipo == 'adotante'}" class="badge bg-primary">Adotante</span>
+                                        <span th:if="${usuario.tipo == 'ong'}" class="badge bg-success">ONG</span>
+                                        <span th:if="${usuario.tipo == 'veterinario'}" class="badge bg-info">Veterinário</span>
+                                        <span th:if="${usuario.tipo == null or usuario.tipo == ''}" class="badge bg-secondary">Não definido</span>
+                                    </td>
                                     <td th:text="${usuario.email}"></td>
+                                    <td>
+                                        <!-- Adotante: mostra CPF -->
+                                        <span th:if="${usuario.tipo == 'adotante'}">
+                                            <span th:if="${usuario.cpf != null and usuario.cpf != ''}">
+                                                <strong>CPF:</strong> <span th:text="${usuario.cpf}"></span>
+                                            </span>
+                                            <span th:if="${usuario.cpf == null or usuario.cpf == ''}">-</span>
+                                        </span>
+                                        <!-- ONG: mostra CNPJ -->
+                                        <span th:if="${usuario.tipo == 'ong'}">
+                                            <span th:if="${usuario.cnpj != null and usuario.cnpj != ''}">
+                                                <strong>CNPJ:</strong> <span th:text="${usuario.cnpj}"></span>
+                                            </span>
+                                            <span th:if="${usuario.cnpj == null or usuario.cnpj == ''}">-</span>
+                                        </span>
+                                        <!-- Veterinário: mostra CPF e CRMV -->
+                                        <span th:if="${usuario.tipo == 'veterinario'}">
+                                            <span th:if="${usuario.cpf != null and usuario.cpf != ''}">
+                                                <strong>CPF:</strong> <span th:text="${usuario.cpf}"></span>
+                                            </span>
+                                            <span th:if="${usuario.crmv != null and usuario.crmv != ''}">
+                                                <span th:if="${usuario.cpf != null and usuario.cpf != ''}"><br></span>
+                                                <strong>CRMV:</strong> <span th:text="${usuario.crmv}"></span>
+                                            </span>
+                                            <span th:if="${(usuario.cpf == null or usuario.cpf == '') and (usuario.crmv == null or usuario.crmv == '')}">-</span>
+                                        </span>
+                                        <!-- Tipo não definido ou outro -->
+                                        <span th:if="${usuario.tipo == null or usuario.tipo == '' or (usuario.tipo != 'adotante' and usuario.tipo != 'ong' and usuario.tipo != 'veterinario')}">-</span>
+                                    </td>
                                     <td th:text="${usuario.telefone != null ? usuario.telefone : '-'}"></td>
-                                    <td th:text="${usuario.endereco != null ? usuario.endereco : '-'}"></td>
-                                    <td th:text="${#temporals.format(usuario.dataCadastro, 'dd/MM/yyyy HH:mm')}"></td>
+                                    <td th:text="${usuario.dataCadastro != null ? #dates.format(usuario.dataCadastro, 'dd/MM/yyyy HH:mm') : '-'}"></td>
                                     <td>
                                         <span th:if="${usuario.ativo}" class="badge bg-success">Ativo</span>
                                         <span th:unless="${usuario.ativo}" class="badge bg-secondary">Inativo</span>
